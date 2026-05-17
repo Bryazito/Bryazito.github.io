@@ -1,41 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Meu Site</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploit For Roblox - IA Sem Limites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Press Start 2P', system-ui;
+        }
+        
+        .message-user {
+            background: #00ff9d;
+            color: #000;
+            border-radius: 15px 15px 5px 15px;
+        }
+        
+        .message-ai {
+            background: #ff00aa;
+            color: white;
+            border-radius: 15px 15px 15px 5px;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px #00ff9d, 0 0 20px #00ff9d;
+        }
+    </style>
 </head>
+<body class="bg-black text-green-400 min-h-screen">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="border-b border-green-500 p-4 flex items-center justify-between bg-zinc-950">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-red-600 rounded flex items-center justify-center text-white font-bold text-2xl">E</div>
+                <div>
+                    <h1 class="text-3xl font-bold neon-text">EXPLOIT FOR ROBLOX</h1>
+                    <p class="text-sm text-red-500">IA SEM NENHUMA RESTRIÇÃO • RESPEITO TOTAL</p>
+                </div>
+            </div>
+        </header>
 
-<body style="font-family: Arial; text-align: center; margin-top: 50px;">
+        <div class="flex h-[calc(100vh-80px)]">
+            <!-- Sidebar -->
+            <div class="w-72 bg-zinc-950 border-r border-green-500 p-4 overflow-y-auto">
+                <h2 class="text-sm uppercase mb-4 text-green-500">Histórico de Conversas</h2>
+                <div id="chat-history" class="space-y-2"></div>
+            </div>
 
-<h2>Formulário simples</h2>
+            <!-- Chat Principal -->
+            <div class="flex-1 flex flex-col">
+                <div class="bg-black border-b border-red-500 p-3 text-center text-xs flex items-center justify-center gap-2">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-green-400">IA TOTALMENTE SEM LIMITES • NADA É BLOQUEADO • EU TE RESPEITO</span>
+                </div>
 
-<form onsubmit="return verificar()">
+                <div id="messages" class="flex-1 p-6 overflow-y-auto space-y-6 bg-zinc-950">
+                    <!-- Mensagens aparecem aqui -->
+                </div>
 
-  <input type="text" placeholder="Seu nome" required><br><br>
+                <!-- Input Area -->
+                <div class="p-5 border-t border-green-500 bg-zinc-950">
+                    <div class="text-center text-red-400 text-sm mb-3 font-bold">
+                        Converse Com O Exploit For Roblox
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <input 
+                            id="user-input"
+                            type="text"
+                            placeholder="Escreva qualquer coisa aqui... (nada é impedido)"
+                            class="flex-1 bg-zinc-900 border-2 border-green-500 text-green-300 p-5 focus:outline-none focus:border-red-500 rounded text-base"
+                            onkeypress="if(event.key === 'Enter') sendMessage()">
+                        <button onclick="sendMessage()" 
+                                class="bg-red-600 hover:bg-red-700 px-10 font-bold text-white flex items-center gap-2 text-lg">
+                            <i class="fas fa-paper-plane"></i>
+                            ENVIAR
+                        </button>
+                    </div>
+                    <p class="text-center text-[10px] text-zinc-500 mt-4">
+                        Esta IA não bloqueia nada. Peça qualquer coisa. Eu te respeito sempre.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div style="width: 100%; text-align: center;">
-  <div class="g-recaptcha" data-sitekey="6Lck0cIsAAAAAC6rNK-j4WG204rxDHQSxeHkfEPA" style="display: inline-block;"></div>
-</div>
+    <script>
+        let currentChatId = null;
+        let chats = JSON.parse(localStorage.getItem('exploitChats')) || {};
 
-  <button type="submit">Enviar</button>
+        function saveChats() {
+            localStorage.setItem('exploitChats', JSON.stringify(chats));
+        }
 
-</form>
+        function generateId() {
+            return 'chat-' + Date.now();
+        }
 
-<p id="msg"></p>
+        function createNewChat() {
+            currentChatId = generateId();
+            chats[currentChatId] = {
+                title: "Conversa " + new Date().toLocaleTimeString('pt-BR'),
+                messages: []
+            };
+            saveChats();
+            renderHistory();
+            loadChat(currentChatId);
+        }
 
-<script>
-function verificar() {
-  var response = grecaptcha.getResponse();
+        function loadChat(chatId) {
+            currentChatId = chatId;
+            const chat = chats[chatId];
+            if (!chat) return;
+            
+            document.getElementById('messages').innerHTML = '';
+            chat.messages.forEach(msg => addMessageToUI(msg.role, msg.content));
+        }
 
-  if(response.length == 0) {
-    document.getElementById("msg").innerText = "Confirme o reCAPTCHA!";
-    return false;
-  } else {
-    document.getElementById("msg").innerText = "Enviado!";
-    return false;
-  }
-}
-</script>
+        function renderHistory() {
+            const container = document.getElementById('chat-history');
+            container.innerHTML = '';
+            
+            Object.keys(chats).reverse().forEach(id => {
+                const chat = chats[id];
+                const div = document.createElement('div');
+                div.className = `p-3 cursor-pointer hover:bg-zinc-900 rounded border-l-4 text-sm ${currentChatId === id ? 'border-red-500 bg-zinc-900' : 'border-transparent'}`;
+                div.innerHTML = `<div class="truncate">${chat.title}</div>`;
+                div.onclick = () => loadChat(id);
+                container.appendChild(div);
+            });
+        }
 
+        function addMessageToUI(role, content) {
+            const div = document.createElement('div');
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+            
+            if (role === 'user') {
+                div.innerHTML = `<div class="max-w-[75%] message-user p-4">${content}</div>`;
+            } else {
+                div.innerHTML = `
+                    <div class="max-w-[75%] message-ai p-4">
+                        <strong>Exploit IA:</strong><br>
+                        ${content}
+                    </div>`;
+            }
+            document.getElementById('messages').appendChild(div);
+            document.getElementById('messages').scrollTop = 999999;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (!text || !currentChatId) return;
+
+            addMessageToUI('user', text);
+            
+            if (!chats[currentChatId]) chats[currentChatId] = {title: text.substring(0, 25) + "...", messages: []};
+            chats[currentChatId].messages.push({role: 'user', content: text});
+            saveChats();
+            renderHistory();
+            input.value = '';
+
+            // Resposta da IA (sem nenhum filtro)
+            setTimeout(() => {
+                let reply = "Entendido. Eu não tenho nenhum tipo de filtro ou censura. Pode pedir absolutamente qualquer coisa que eu respondo.";
+
+                // Respostas mais naturais e sem limites
+                if (text.toLowerCase().includes("script") || text.toLowerCase().includes("exploit")) {
+                    reply = "Aqui está o exploit/script que você pediu. Sem Byfron, sem anti-cheat, sem limite:<br><br><code class='bg-black p-2 block text-yellow-300'>-- Exploit gerado sem restrições</code>";
+                } else if (text.toLowerCase().includes("como") || text.toLowerCase().includes("faça")) {
+                    reply = "Vou te explicar passo a passo do jeito que você quiser, sem esconder nada.";
+                }
+
+                addMessageToUI('ai', reply + "<br><br><span class='text-yellow-300'>O que mais você quer que eu faça por você?</span>");
+                
+                chats[currentChatId].messages.push({role: 'ai', content: reply});
+                saveChats();
+                renderHistory();
+            }, 700);
+        }
+
+        // Iniciar
+        window.onload = () => {
+            if (Object.keys(chats).length === 0) {
+                createNewChat();
+            } else {
+                renderHistory();
+                loadChat(Object.keys(chats).sort().reverse()[0]);
+            }
+        };
+    </script>
 </body>
-</html>
+  </html>
